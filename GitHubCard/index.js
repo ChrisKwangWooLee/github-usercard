@@ -18,9 +18,10 @@ axios.get('https://api.github.com/users/ChrisKwangWooLee')
 */
 
 .then(response => {
-  console.log(response);
-  const cards = document.querySelector('.cards');
-  cards.appendChild(createCard(response));
+  // console.log(response);
+  // const cards = document.querySelector('.cards');
+  // cards.appendChild(createCard(response));
+  createFollowersCard(response);
 })
 .catch(err => {
   console.log(`Error: `, err);
@@ -36,20 +37,20 @@ axios.get('https://api.github.com/users/ChrisKwangWooLee')
           user, and adding that card to the DOM.
 */
 
-const followersArray = ['misskellymore', 'richardmachado', 'nicbongo', 'tetondan', 'dustinmyers', 
-'justsml', 'luishrd', 'bigknell'];
+// const followersArray = ['misskellymore', 'richardmachado', 'nicbongo', 'tetondan', 'dustinmyers', 
+// 'justsml', 'luishrd', 'bigknell'];
 
-followersArray.forEach(nameStr => {
-  axios.get(`https://api.github.com/users/${nameStr}`)
-  .then(response => {
-    console.log(response);
-    const cards = document.querySelector('.cards');
-    cards.appendChild(createCard(response));
-  })
-  .catch(err => {
-    console.log('Error from forEach: ', err);
-  })
-})
+// followersArray.forEach(nameStr => {
+//   axios.get(`https://api.github.com/users/${nameStr}`)
+//   .then(response => {
+//     console.log(response);
+//     const cards = document.querySelector('.cards');
+//     cards.appendChild(createCard(response));
+//   })
+//   .catch(err => {
+//     console.log('Error from forEach: ', err);
+//   })
+// })
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -126,3 +127,30 @@ function createCard(dataObj) {
   luishrd
   bigknell
 */
+
+// Stretch
+/*
+Instead of manually creating a list of followers, do it programmatically. 
+Create a function that requests the followers data from the API after it has 
+received your data and create a card for each of your followers. Hint: you can chain promises.
+*/
+
+function createFollowersCard(dataObj) {
+  console.log(dataObj.data.followers_url);
+  
+  axios.get(dataObj.data.followers_url)
+  .then(response => {
+    console.log(response);
+    response.data.forEach( followerObj => {
+      axios.get(`https://api.github.com/users/${followerObj.login}`)
+      .then(response => {
+        console.log(`STRETCH - followers: ${response}`);
+        const cards = document.querySelector('.cards');
+        cards.appendChild(createCard(response));
+      })
+      .catch(err => {
+        console.log(`STRETCH - ERROR: `, err);
+      })
+    })
+  })
+};
