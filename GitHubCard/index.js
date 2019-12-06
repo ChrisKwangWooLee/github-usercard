@@ -21,6 +21,7 @@ axios.get('https://api.github.com/users/ChrisKwangWooLee')
   // console.log(response);
   // const cards = document.querySelector('.cards');
   // cards.appendChild(createCard(response));
+  console.log(response);
   createFollowersCard(response);
 })
 .catch(err => {
@@ -56,17 +57,24 @@ axios.get('https://api.github.com/users/ChrisKwangWooLee')
           Using DOM methods and properties, create a component that will return the following DOM element:
 
 <div class="card">
-  <img src={image url of user} />
-  <div class="card-info">
-    <h3 class="name">{users name}</h3>
-    <p class="username">{users user name}</p>
-    <p>Location: {users location}</p>
-    <p>Profile:  
-      <a href={address to users github page}>{address to users github page}</a>
-    </p>
-    <p>Followers: {users followers count}</p>
-    <p>Following: {users following count}</p>
-    <p>Bio: {users bio}</p>
+  <div class= 'card-img-info'>
+    <img src={image url of user} />
+    <div class="card-info">
+      <h3 class="name">{users name}</h3>
+      <p class="username">{users user name}</p>
+      <p>Location: {users location}</p>
+      <p>Profile:  
+        <a href={address to users github page}>{address to users github page}</a>
+      </p>
+      <p>Followers: {users followers count}</p>
+      <p>Following: {users following count}</p>
+      <p>Bio: {users bio}</p>
+    </div>
+  </div>
+  <div class = 'calendar'></div>
+  <div class='button-container'>
+    <p class='open-button btn-on'>	\u25BC</p>
+    <p class='close-button'>Close</p>
   </div>
 </div>
 
@@ -84,13 +92,38 @@ function createCard(dataObj) {
         newUserAddress = document.createElement('a'),
         newFollowers = document.createElement('p'),
         newFollowing = document.createElement('p'),
-        newBio = document.createElement('p');
+        newBio = document.createElement('p'),
+        // Stretch
+        cardImgInfo = document.createElement('div'),
+        newCalendar = document.createElement('div'),
+        buttonContainer = document.createElement('div'),
+        openButton = document.createElement('p'),
+        closeButton = document.createElement('p');
+
+  // fetch calendar (stretch)
+  const calendar = new GitHubCalendar(".calendar", dataObj.data.login);
   
+  calendar
+  .then(response => {
+    console.dir('THIS: ', response);
+  })
+  
+
+
   // add class
   newCard.classList.add('card');
   newCardInfo.classList.add('card-info');
   newName.classList.add('name');
   newUserName.classList.add('username');
+  cardImgInfo.classList.add('card-img-info');
+  newCalendar.classList.add('calendar');
+
+
+  // Stretch
+  buttonContainer.classList.add('button-container');
+  openButton.classList.add('open-button');
+  openButton.classList.add('btn-on');
+  closeButton.classList.add('close-button');
 
   // add src and content
   newImg.src = dataObj.data.avatar_url;
@@ -103,6 +136,9 @@ function createCard(dataObj) {
   newFollowers.textContent = `Followers: ${dataObj.data.followers}`;
   newFollowing.textContent = `Following: ${dataObj.data.following}`;
   newBio.textContent = `Bio: ${dataObj.data.bio}`;
+  // Stretch
+  openButton.textContent = `\u25BD`;
+  closeButton.textContent = '\u25B3';
 
   // append
   newProfile.appendChild(newUserAddress);
@@ -113,9 +149,32 @@ function createCard(dataObj) {
   newCardInfo.appendChild(newFollowers);
   newCardInfo.appendChild(newFollowing);
   newCardInfo.appendChild(newBio);
-  newCard.appendChild(newImg);
-  newCard.appendChild(newCardInfo);
+  cardImgInfo.appendChild(newImg);
+  cardImgInfo.appendChild(newCardInfo);
+  // Stretch
+  buttonContainer.appendChild(openButton);
+  buttonContainer.appendChild(closeButton);
+  newCard.appendChild(cardImgInfo);
+  newCard.appendChild(newCalendar);
+  newCard.appendChild(buttonContainer);
 
+  // Add event listener
+  openButton.addEventListener('click', event => {
+    console.log('open button clicked', event.target);
+    event.stopPropagation();
+    
+    closeButton.classList.toggle('btn-on');
+    event.target.classList.toggle('btn-on');
+    newCalendar.classList.toggle('cal-on');
+  });
+
+  closeButton.addEventListener('click', event => {
+    console.log('close button clicked', event.target);
+
+    openButton.classList.toggle('btn-on');
+    event.target.classList.toggle('btn-on');
+    newCalendar.classList.toggle('cal-on');
+  })
 
   return newCard;
 }

@@ -91,14 +91,62 @@ body {
   width: 100%;
 }
 
+/* Stretch */
 .card {
   width: 100%;
   padding: 20px;
   display: flex;
+  flex-direction: column;
   border-radius: 5px;
   box-shadow: 0 1px 6px -2px #000;
   background-color: #FFF;
   margin-bottom: 30px;
+}
+
+.card-img-info {
+  display: flex;
+  flex-direction: row;
+}
+
+.button-container {
+  padding: 5px;
+  border-radius: 10px;
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+.calendar {
+  display: none;
+}
+
+.cal-on {
+  display: block;
+}
+
+.open-button {
+  display: none;
+  background:rgb(203, 203, 203);
+  color: white;
+  padding: 5px;
+  width: 500px;
+  margin: 0 auto;
+  cursor: pointer; 
+}
+
+.close-button {
+  display: none;
+  background:rgb(203, 203, 203);
+  color: white;
+  padding: 5px;
+  width: 500px;
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+.btn-on {
+  display: block;
 }
 
 .card img {
